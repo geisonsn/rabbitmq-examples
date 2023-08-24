@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "./01-hello-world"
+		},
+		{
+			"path": "./02-work-queues"
+		},
+		{
+			"path": "docker"
+		}
+	]
+}
