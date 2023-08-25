@@ -1,6 +1,6 @@
 
 #  Work Queues
-
+### (using the Go RabbitMQ client)
 
 
 ##### Prerequisites
@@ -12,9 +12,8 @@ This tutorial assumes RabbitMQ is [installed](https://www.rabbitmq.com/download.
 If you're having trouble going through this tutorial you can contact us through the [mailing list](https://groups.google.com/forum/#!forum/rabbitmq-users) or [RabbitMQ community Slack](https://rabbitmq.com/slack/).
 
 
-Work Queues
--------------
-### (using the Go RabbitMQ client)
+---
+
 
 <p align="center">
   <img src="https://www.rabbitmq.com/img/tutorials/python-two.png">
