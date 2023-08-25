@@ -1,18 +1,6 @@
 
-#  Work Queues
+#  [Work Queues](https://www.rabbitmq.com/tutorials/tutorial-two-python.html)
 ### (using the Go RabbitMQ client)
-
-
-##### Prerequisites
-
-This tutorial assumes RabbitMQ is [installed](https://www.rabbitmq.com/download.html) and running on localhost on the [standard port](https://www.rabbitmq.com/networking.html#ports) (5672). In case you use a different host, port or credentials, connections settings would require adjusting. 
-
-##### Where to get help
-
-If you're having trouble going through this tutorial you can contact us through the [mailing list](https://groups.google.com/forum/#!forum/rabbitmq-users) or [RabbitMQ community Slack](https://rabbitmq.com/slack/).
-
-
----
 
 
 <p align="center">
