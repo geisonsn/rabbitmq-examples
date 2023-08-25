@@ -1,5 +1,5 @@
 
-#  RabbitMQ tutorial - Work Queues
+#  Work Queues
 
 
 
