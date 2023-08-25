@@ -47,7 +47,7 @@ We were using a `fanout` exchange, which doesn't give us much flexibility - it's
 We will use a `direct` exchange instead. The routing algorithm behind a `direct` exchange is simple - a message goes to the queues whose `binding key` exactly matches the `routing key` of the message.
 
 To illustrate that, consider the following setup:
-<div align="center">
+<p align="center">
 <img src="https://www.rabbitmq.com/img/tutorials/direct-exchange.png">
 </p>
 
@@ -57,7 +57,8 @@ In such a setup a message published to the exchange with a routing key `orange` 
 
 Multiple bindings
 -----------------
-<div align="center">
+
+<p align="center">
 <img src="https://www.rabbitmq.com/img/tutorials/direct-exchange-multiple.png">
 </p>
 
@@ -151,7 +152,7 @@ for _, s := range os.Args[1:] {
 
 Putting it all together
 -----------------------
-<div align="center">
+<p align="center">
 <img src="https://www.rabbitmq.com/img/tutorials/python-four.png">
 </p>
 
