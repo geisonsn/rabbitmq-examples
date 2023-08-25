@@ -11,6 +11,9 @@
 			"path": "./03-publish-subscribe"
 		},
 		{
+			"path": "./04-routing"
+		},
+		{
 			"path": "docker"
 		}
 	]
