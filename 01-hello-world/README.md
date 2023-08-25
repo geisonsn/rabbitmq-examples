@@ -1,5 +1,5 @@
 
-#  RabbitMQ tutorial - "Hello World!" 
+#Hello World!
 
 
 ##### Prerequisites
