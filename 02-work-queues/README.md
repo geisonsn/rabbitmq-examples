@@ -16,9 +16,9 @@ This concept is especially useful in web applications where it's impossible to h
 Preparation
 -----------
 
-In the previous part of this tutorial we sent a message containing "Hello World!". Now we'll be sending strings that stand for complex tasks. We don't have a real-world task, like images to be resized or pdf files to be rendered, so let's fake it by just pretending we're busy - by using the time.Sleep function. We'll take the number of dots in the string as its complexity; every dot will account for one second of "work". For example, a fake task described by Hello... will take three seconds.
+In the previous part of this tutorial we sent a message containing "Hello World!". Now we'll be sending strings that stand for complex tasks. We don't have a real-world task, like images to be resized or pdf files to be rendered, so let's fake it by just pretending we're busy - by using the `time.Sleep` function. We'll take the number of dots in the string as its complexity; every dot will account for one second of "work". For example, a fake task described by `Hello...` will take three seconds.
 
-We will slightly modify the _send.go_ code from our previous example, to allow arbitrary messages to be sent from the command line. This program will schedule tasks to our work queue, so let's name it new\_task.go:
+We will slightly modify the _send.go_ code from our previous example, to allow arbitrary messages to be sent from the command line. This program will schedule tasks to our work queue, so let's name it `new_task.go`:
 
 ```go
 ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -37,11 +37,10 @@ err = ch.PublishWithContext(ctx,
   })
 failOnError(err, "Failed to publish a message")
 log.Printf(" [x] Sent %s", body)
-
 ```
 
 
-Here is the bodyFrom function:
+Here is the `bodyFrom` function:
 
 ```go
 func bodyFrom(args []string) string {
@@ -53,11 +52,10 @@ func bodyFrom(args []string) string {
     }
     return s
 }
-
 ```
 
 
-Our old _receive.go_ script also requires some changes: it needs to fake a second of work for every dot in the message body. It will pop messages from the queue and perform the task, so let's call it worker.go:
+Our old _receive.go_ script also requires some changes: it needs to fake a second of work for every dot in the message body. It will pop messages from the queue and perform the task, so let's call it `worker.go`:
 
 ```go
 msgs, err := ch.Consume(
@@ -85,7 +83,6 @@ go func() {
 
 log.Printf(" [*] Waiting for messages. To exit press CTRL+C")
 <-forever
-
 ```
 
 
@@ -96,14 +93,12 @@ Run them as in tutorial one:
 ```bash
 # shell 1
 go run worker.go
-
 ```
 
 
 ```bash
 # shell 2
 go run new_task.go
-
 ```
 
 
@@ -112,15 +107,14 @@ Round-robin dispatching
 
 One of the advantages of using a Task Queue is the ability to easily parallelise work. If we are building up a backlog of work, we can just add more workers and that way, scale easily.
 
-First, let's try to run two worker.go scripts at the same time. They will both get messages from the queue, but how exactly? Let's see.
+First, let's try to run two `worker.go` scripts at the same time. They will both get messages from the queue, but how exactly? Let's see.
 
-You need three consoles open. Two will run the worker.go script. These consoles will be our two consumers - C1 and C2.
+You need three consoles open. Two will run the `worker.go` script. These consoles will be our two consumers - C1 and C2.
 
 ```bash
 # shell 1
 go run worker.go
 # => [*] Waiting for messages. To exit press CTRL+C
-
 ```
 
 
@@ -128,7 +122,6 @@ go run worker.go
 # shell 2
 go run worker.go
 # => [*] Waiting for messages. To exit press CTRL+C
-
 ```
 
 
@@ -141,7 +134,6 @@ go run new_task.go Second message..
 go run new_task.go Third message...
 go run new_task.go Fourth message....
 go run new_task.go Fifth message.....
-
 ```
 
 
@@ -154,7 +146,6 @@ go run worker.go
 # => [x] Received 'First message.'
 # => [x] Received 'Third message...'
 # => [x] Received 'Fifth message.....'
-
 ```
 
 
@@ -183,7 +174,7 @@ If a consumer dies (its channel is closed, connection is closed, or TCP connecti
 
 A timeout (30 minutes by default) is enforced on consumer delivery acknowledgement. This helps detect buggy (stuck) consumers that never acknowledge deliveries. You can increase this timeout as described in [Delivery Acknowledgement Timeout](https://www.rabbitmq.com/consumers.html#acknowledgement-timeout).
 
-In this tutorial we will use manual message acknowledgements by passing a false for the "auto-ack" argument and then send a proper acknowledgment from the worker with d.Ack(false) (this acknowledges a single delivery), once we're done with a task.
+In this tutorial we will use manual message acknowledgements by passing a `false` for the "auto-ack" argument and then send a proper acknowledgment from the worker with `d.Ack(false)` (this acknowledges a single delivery), once we're done with a task.
 
 ```go
 msgs, err := ch.Consume(
@@ -221,9 +212,9 @@ Acknowledgement must be sent on the same channel that received the delivery. Att
 
 > #### Forgotten acknowledgment
 > 
-> It's a common mistake to miss the ack. It's an easy error, but the consequences are serious. Messages will be redelivered when your client quits (which may look like random redelivery), but RabbitMQ will eat more and more memory as it won't be able to release any unacked messages.
+> It's a common mistake to miss the `ack`. It's an easy error, but the consequences are serious. Messages will be redelivered when your client quits (which may look like random redelivery), but RabbitMQ will eat more and more memory as it won't be able to release any unacked messages.
 > 
-> In order to debug this kind of mistake you can use rabbitmqctl to print the messages\_unacknowledged field:
+> In order to debug this kind of mistake you can use `rabbitmqctl` to print the `messages_unacknowledged` field:
 > 
 > ```bash
 > sudo rabbitmqctl list_queues name messages_ready messages_unacknowledged
@@ -231,7 +222,7 @@ Acknowledgement must be sent on the same channel that received the delivery. Att
 > 
 > On Windows, drop the sudo:
 > 
-> ```
+> ```bash
 > rabbitmqctl.bat list_queues name messages_ready messages_unacknowledged
 >```
 
@@ -257,7 +248,7 @@ q, err := ch.QueueDeclare(
 failOnError(err, "Failed to declare a queue")
 ```
 
-Although this command is correct by itself, it won't work in our present setup. That's because we've already defined a queue called hello which is not durable. RabbitMQ doesn't allow you to redefine an existing queue with different parameters and will return an error to any program that tries to do that. But there is a quick workaround - let's declare a queue with different name, for example task\_queue:
+Although this command is correct by itself, it won't work in our present setup. That's because we've already defined a queue called `hello` which is not durable. RabbitMQ doesn't allow you to redefine an existing queue with different parameters and will return an error to any program that tries to do that. But there is a quick workaround - let's declare a queue with different name, for example `task_queue`:
 
 ```go
 q, err := ch.QueueDeclare(
@@ -271,9 +262,9 @@ q, err := ch.QueueDeclare(
 failOnError(err, "Failed to declare a queue")
 ```
 
-This durable option change needs to be applied to both the producer and consumer code.
+This `durable` option change needs to be applied to both the producer and consumer code.
 
-At this point we're sure that the task\_queue queue won't be lost even if RabbitMQ restarts. Now we need to mark our messages as persistent - by using the amqp.Persistent option amqp.Publishing takes.
+At this point we're sure that the `task_queue` queue won't be lost even if RabbitMQ restarts. Now we need to mark our messages as persistent - by using the `amqp.Persistent` option `amqp.Publishing` takes.
 
 ```go
 err = ch.PublishWithContext(ctx,
@@ -290,7 +281,7 @@ err = ch.PublishWithContext(ctx,
 
 > #### Note on message persistence
 > 
-> Marking messages as persistent doesn't fully guarantee that a message won't be lost. Although it tells RabbitMQ to save the message to disk, there is still a short time window when RabbitMQ has accepted a message and hasn't saved it yet. Also, RabbitMQ doesn't do fsync(2) for every message -- it may be just saved to cache and not really written to the disk. The persistence guarantees aren't strong, but it's more than enough for our simple task queue. If you need a stronger guarantee then you can use [publisher confirms](https://www.rabbitmq.com/confirms.html).
+> Marking messages as persistent doesn't fully guarantee that a message won't be lost. Although it tells RabbitMQ to save the message to disk, there is still a short time window when RabbitMQ has accepted a message and hasn't saved it yet. Also, RabbitMQ doesn't do `fsync(2)` for every message -- it may be just saved to cache and not really written to the disk. The persistence guarantees aren't strong, but it's more than enough for our simple task queue. If you need a stronger guarantee then you can use [publisher confirms](https://www.rabbitmq.com/confirms.html).
 
 Fair dispatch
 -------------
@@ -303,7 +294,7 @@ This happens because RabbitMQ just dispatches a message when the message enters 
   <img src="https://www.rabbitmq.com/img/tutorials/prefetch-count.png">
 </p>
 
-In order to defeat that we can set the prefetch count with the value of 1. This tells RabbitMQ not to give more than one message to a worker at a time. Or, in other words, don't dispatch a new message to a worker until it has processed and acknowledged the previous one. Instead, it will dispatch it to the next worker that is not still busy.
+In order to defeat that we can set the prefetch count with the value of `1`. This tells RabbitMQ not to give more than one message to a worker at a time. Or, in other words, don't dispatch a new message to a worker until it has processed and acknowledged the previous one. Instead, it will dispatch it to the next worker that is not still busy.
 
 ```go
 err = ch.Qos(
@@ -321,7 +312,7 @@ failOnError(err, "Failed to set QoS")
 Putting it all together
 -----------------------
 
-Final code of our new\_task.go class:
+Final code of our `new_task.go` class:
 
 ```go
 package main
@@ -393,7 +384,7 @@ func bodyFrom(args []string) string {
 
 [(new\_task.go source)](http://github.com/rabbitmq/rabbitmq-tutorials/blob/main/go/new_task.go)
 
-And our worker.go:
+And our `worker.go`:
 
 ```go
 package main
@@ -465,7 +456,6 @@ func main() {
         log.Printf(" [*] Waiting for messages. To exit press CTRL+C")
         <-forever
 }
-
 ```
 
 
@@ -473,7 +463,7 @@ func main() {
 
 Using message acknowledgments and prefetch count you can set up a work queue. The durability options let the tasks survive even if RabbitMQ is restarted.
 
-For more information on amqp.Channel methods and message properties, you can browse the [amqp API reference](https://pkg.go.dev/github.com/rabbitmq/amqp091-go).
+For more information on `amqp.Channel` methods and message properties, you can browse the [amqp API reference](https://pkg.go.dev/github.com/rabbitmq/amqp091-go).
 
 Now we can move on to [tutorial 3](https://www.rabbitmq.com/tutorials/tutorial-three-go.html) and learn how to deliver the same message to many consumers.
 
