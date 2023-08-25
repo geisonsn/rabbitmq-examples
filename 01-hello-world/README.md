@@ -1,14 +1,7 @@
 
-#Hello World!
 
+# [Hello World!](https://www.rabbitmq.com/tutorials/tutorial-one-go.html)
 
-##### Prerequisites
-
-This tutorial assumes RabbitMQ is [installed](https://www.rabbitmq.com/download.html) and running on localhost on the [standard port](https://www.rabbitmq.com/networking.html#ports) (5672). In case you use a different host, port or credentials, connections settings would require adjusting.
-
-##### Where to get help
-
-If you're having trouble going through this tutorial you can contact us through the [mailing list](https://groups.google.com/forum/#!forum/rabbitmq-users) or [RabbitMQ community Slack](https://rabbitmq.com/slack/).
 
 Introduction
 ------------
@@ -56,7 +49,7 @@ In the diagram below, "P" is our producer and "C" is our consumer. The box in th
 > 
 > RabbitMQ speaks multiple protocols. This tutorial uses AMQP 0-9-1, which is an open, general-purpose protocol for messaging. There are a number of clients for RabbitMQ in [many different languages](http://rabbitmq.com/devtools.html). We'll use the Go amqp client in this tutorial.
 > 
-> First, install amqp using go get:
+> First, install amqp using `go get`:
 > 
 > ```bash
 > go get github.com/rabbitmq/amqp091-go
@@ -71,9 +64,9 @@ Now we have *amqp* installed, we can write some code.
 <img  src="https://www.rabbitmq.com/img/tutorials/sending.png">
 </p>
 
-We'll call our message publisher (sender) send.go and our message consumer (receiver) receive.go. The publisher will connect to RabbitMQ, send a single message, then exit.
+We'll call our message publisher (sender) `send.go` and our message consumer (receiver) `receive.go`. The publisher will connect to RabbitMQ, send a single message, then exit.
 
-In [send.go](https://github.com/rabbitmq/rabbitmq-tutorials/blob/main/go/send.go), we need to import the library first:
+In [`send.go`](https://github.com/rabbitmq/rabbitmq-tutorials/blob/main/go/send.go), we need to import the library first:
 
 ```go
 package main
@@ -165,7 +158,7 @@ That's it for our publisher. Our consumer listens for messages from RabbitMQ, so
 <img  src="https://www.rabbitmq.com/img/tutorials/receiving.png">
 </p>
 
-The code (in [receive.go](https://github.com/rabbitmq/rabbitmq-tutorials/blob/main/go/receive.go)) has the same import and helper function as send:
+The code (in [`receive.go`](https://github.com/rabbitmq/rabbitmq-tutorials/blob/main/go/receive.go)) has the same import and helper function as `send`:
 
 ```go
 package main
@@ -185,7 +178,7 @@ func failOnError(err error, msg string) {
 ```
 
 
-Setting up is the same as the publisher; we open a connection and a channel, and declare the queue from which we're going to consume. Note this matches up with the queue that send publishes to.
+Setting up is the same as the publisher; we open a connection and a channel, and declare the queue from which we're going to consume. Note this matches up with the queue that `send` publishes to.
 
 ```go
 conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
@@ -211,7 +204,7 @@ failOnError(err, "Failed to declare a queue")
 
 Note that we declare the queue here, as well. Because we might start the consumer before the publisher, we want to make sure the queue exists before we try to consume messages from it.
 
-We're about to tell the server to deliver us the messages from the queue. Since it will push us messages asynchronously, we will read the messages from a channel (returned by amqp::Consume) in a goroutine.
+We're about to tell the server to deliver us the messages from the queue. Since it will push us messages asynchronously, we will read the messages from a channel (returned by `amqp::Consume`) in a goroutine.
 
 ```go
 msgs, err := ch.Consume(
@@ -247,7 +240,6 @@ Now we can run both scripts. In a terminal, run the publisher:
 
 ```bash
 go run send.go
-
 ```
 
 
@@ -255,7 +247,6 @@ then, run the consumer:
 
 ```bash
 go run receive.go
-
 ```
 
 
